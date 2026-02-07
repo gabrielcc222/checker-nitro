@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>by gabriel</title>
+    <title>Black Store - Nitro Checker Fixed</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -116,6 +116,25 @@
             color: rgba(255,255,255,0.5);
         }
         .stat-val { color: #fff; margin-left: 6px; font-size: 14px; }
+        .dock-wrapper { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; }
+        .dock {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(40px);
+            padding: 10px 18px;
+            border-radius: 24px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .dock-icon { width: 54px; height: 54px; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .dock-icon:hover { transform: scale(1.3) translateY(-15px); }
+        .dock-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .dock-icon.active::after {
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px; background: white; border-radius: 50%;
+        }
         @media (max-width: 768px) {
             .window { width: 100%; height: 100%; border-radius: 0; }
             .controls { display: none; }
@@ -135,12 +154,12 @@
             <div class="dot dot-yellow"></div>
             <div class="dot dot-green"></div>
         </div>
-        <div class="window-title">Black Store - Checker</div>
+        <div class="window-title">Black Store - Checker (Fixed)</div>
     </div>
     <div class="content">
         <div class="sidebar">
             <span class="label">Input Links</span>
-            <textarea id="linksInput" placeholder="coloque os links aqui..."></textarea>
+            <textarea id="linksInput" placeholder="Cole os links ou códigos aqui..."></textarea>
             <button class="btn btn-blue" id="startBtn" onclick="startChecker()">começar</button>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <button class="btn btn-gray" onclick="copyValids()" style="font-size: 11px;">copiar</button>
@@ -151,7 +170,7 @@
         </div>
         <div class="terminal-container">
             <div class="terminal" id="terminal">
-                <div style="color: var(--apple-blue); font-weight: bold; margin-bottom: 15px;">[SISTEMA] INICIADO.</div>
+                <div style="color: var(--apple-blue); font-weight: bold; margin-bottom: 15px;">[SISTEMA] PRONTO PARA USO.</div>
             </div>
             <div class="footer">
                 <div class="stat-item">TOTAL <span class="stat-val" id="stat-total">0</span></div>
@@ -161,11 +180,20 @@
         </div>
     </div>
 </div>
+<div class="dock-wrapper">
+    <div class="dock">
+        <div class="dock-icon active" id="dock-checker" onclick="openWindow()">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Nitro Checker">
+        </div>
+        <div class="dock-icon" onclick="closeWindow()">
+            <img src="https://cdn-icons-png.flaticon.com/512/3221/3221803.png" alt="Trash">
+        </div>
+    </div>
+</div>
 
 <script>
     const CONFIG = {
-        token: 'MTQzNzc4NDg2MTkyMTI0NzIzMg.GckETO.mbbMVi2qUk9DLKJD9AR4ufgrMY8Gjwe4GT4GJc',
-        delay: 1000
+        delay: 1500 // Aumentado levemente para evitar rate limit rápido
     };
     
     let stats = { total: 0, checked: 0, valid: 0, invalid: 0, isRunning: false, validLinks: [] };
@@ -188,19 +216,21 @@
     }
 
     async function checkNitro(code) {
+        // Removido o token de autorização pois não é necessário para gift codes públicos
         const url = `https://discord.com/api/v9/entitlements/gift-codes/${code}?with_application=false&with_subscription_plan=true`;
         try {
             const response = await fetch(url, { 
                 method: 'GET', 
-                headers: { 
-                    'Authorization': CONFIG.token,
-                    'Accept': '*/*' 
-                } 
+                headers: { 'Accept': '*/*' } 
             });
             
             if (response.status === 200) {
                 const data = await response.json();
-                return (data.uses < data.max_uses) ? 'VALID' : 'CLAIMED';
+                if (data.uses < data.max_uses) {
+                    return 'VALID';
+                } else {
+                    return 'CLAIMED';
+                }
             } else if (response.status === 404) {
                 return 'INVALID';
             } else if (response.status === 429) {
@@ -222,37 +252,42 @@
         stats.isRunning = true;
         updateStats();
         document.getElementById('startBtn').disabled = true;
-        addLog(`começando ${links.length} links...`, "info");
+        addLog(`Iniciando verificação de ${links.length} links...`, "info");
 
-        for (let i = 0; i < links.length; i++) {
+        for (let link of links) {
             if (!stats.isRunning) break;
-            let link = links[i];
 
-            let code = link.includes('/') ? link.split('/').pop().split('?')[0] : link;
+            // Extrair apenas o código do link (suporta discord.gift/, discordapp.com/gifts/, etc)
+            let code = link;
+            if (link.includes('/')) {
+                code = link.split('/').pop().split('?')[0];
+            }
+
             const result = await checkNitro(code);
 
             if (result === 'VALID') {
                 stats.valid++; 
                 stats.validLinks.push(link);
-                addLog(`valido ${link}`, "valid");
+                addLog(`VÁLIDO: ${link}`, "valid");
             } else if (result === 'CLAIMED') {
                 stats.invalid++;
-                addLog(`resgatado: ${link}`, "warning");
+                addLog(`RESGATADO: ${link}`, "warning");
             } else if (result === 'INVALID') {
                 stats.invalid++;
-                addLog(`invalido: ${link}`, "invalid");
+                addLog(`INVÁLIDO: ${link}`, "invalid");
             } else if (result === 'RATE_LIMIT') {
-                addLog("Rate Limit! aguardando...", "warning");
+                addLog("Rate Limit! Aguardando 10 segundos...", "warning");
                 await new Promise(r => setTimeout(r, 10000));
-                i--; 
+                // Tentar novamente o mesmo link
+                links.unshift(link);
                 continue;
             } else if (result === 'CORS_ERROR') {
-                addLog("Erro de CORS! Use a extensão.", "invalid");
+                addLog("Erro de CORS! Certifique-se de estar usando uma extensão para ignorar CORS.", "invalid");
                 stats.isRunning = false;
                 break;
             } else {
                 stats.invalid++;
-                addLog(`erro: ${link}`, "invalid");
+                addLog(`ERRO DESCONHECIDO: ${link}`, "invalid");
             }
 
             stats.checked++;
@@ -262,7 +297,7 @@
 
         stats.isRunning = false;
         document.getElementById('startBtn').disabled = false;
-        addLog("acabou", "info");
+        addLog("Verificação finalizada.", "info");
     }
 
     function updateStats() {
@@ -271,11 +306,11 @@
         document.getElementById('stat-invalid').textContent = stats.invalid;
     }
 
-    function closeWindow() { document.getElementById('mainWindow').style.display = 'none'; }
-    function openWindow() { document.getElementById('mainWindow').style.display = 'flex'; }
+    function closeWindow() { document.getElementById('mainWindow').style.display = 'none'; document.getElementById('dock-checker').classList.remove('active'); }
+    function openWindow() { document.getElementById('mainWindow').style.display = 'flex'; document.getElementById('dock-checker').classList.add('active'); }
     function handleFile(e) { const reader = new FileReader(); reader.onload = (e) => document.getElementById('linksInput').value = e.target.result; reader.readAsText(e.target.files[0]); }
-    function copyValids() { navigator.clipboard.writeText(stats.validLinks.join('\n')); alert("copiado!"); }
-    function downloadValids() { const blob = new Blob([stats.validLinks.join('\n')], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'valid.txt'; a.click(); }
+    function copyValids() { navigator.clipboard.writeText(stats.validLinks.join('\n')); alert("Copiado!"); }
+    function downloadValids() { const blob = new Blob([stats.validLinks.join('\n')], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'valid_nitro.txt'; a.click(); }
 </script>
 </body>
 </html>
