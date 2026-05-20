@@ -1,293 +1,373 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Black Store - Nitro Checker Fixed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     <style>
-        :root {
-            --apple-blue: #007aff;
-            --apple-green: #34c759;
-            --apple-red: #ff3b30;
-            --apple-yellow: #ffbd2e;
-            --font-main: 'Inter', -apple-system, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --glass-bg: rgba(25, 25, 25, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.15);
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        
+        [data-theme="dark"]{
+            --bg:#0a0a0a;--bg2:#111;--surface:#161616;--surface2:#1c1c1c;--surface3:#242424;
+            --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--border3:rgba(255,255,255,0.18);
+            --blue:#3b82f6;--blue-light:#60a5fa;--blue-dim:rgba(59,130,246,0.12);--blue-dim2:rgba(59,130,246,0.07);
+            --green:#22c55e;--green-dim:rgba(34,197,94,0.12);--red:#ef4444;--red-dim:rgba(239,68,68,0.12);
+            --yellow:#f59e0b;--yellow-dim:rgba(245,158,11,0.12);
+            --text:#f0f0f0;--text2:#a0a0a0;--text3:#666;
+            --shadow:0 1px 3px rgba(0,0,0,0.6),0 4px 16px rgba(0,0,0,0.5);
+            --shadow2:0 2px 12px rgba(0,0,0,0.7),0 8px 40px rgba(0,0,0,0.6);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-font-smoothing: antialiased; }
-        body {
-            height: 100vh;
-            width: 100vw;
-            background: url('https://i.pinimg.com/736x/8b/31/7d/8b317dab27e19adc191397589af6d86e.jpg') no-repeat center center;
-            background-size: cover;
-            font-family: var(--font-main);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        :root{
+            --r:8px;--r2:12px;--r3:18px;--sans:'Inter', sans-serif;
+            --topbar-h:58px;
         }
-        .window {
-            width: 92%;
-            max-width: 1100px;
-            height: 80vh;
-            background: var(--glass-bg);
-            backdrop-filter: blur(40px);
-            border-radius: 14px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--glass-border);
-            overflow: hidden;
-            z-index: 10;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .window-header {
-            height: 44px;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            padding: 0 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .controls { display: flex; gap: 9px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
-        .dot-red { background: var(--apple-red); }
-        .dot-yellow { background: var(--apple-yellow); }
-        .dot-green { background: var(--apple-green); }
-        .window-title { flex: 1; text-align: center; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6); margin-right: 45px; }
-        .content { flex: 1; display: flex; overflow: hidden; }
-        .sidebar {
-            width: 280px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; }
-        textarea {
-            width: 100%;
-            height: 180px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--apple-green);
-            padding: 15px;
-            font-family: var(--font-mono);
-            font-size: 13px;
-            resize: none;
-            outline: none;
-        }
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
+
+        html,body{
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
+            line-height: 1.5;
+            overflow: hidden;
+        }
+
+        .ms {
+            font-family: 'Material Symbols Outlined';
+            font-style: normal;
+            font-size: 22px;
+            line-height: 1;
+            display: inline-block;
+            vertical-align: middle;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            transition: all 0.2s ease;
+        }
+
+        .ripple-host { position: relative; overflow: hidden; cursor: pointer; }
+        .ripple-host .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: rippleAnim 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+        #main-app { display: flex; flex-direction: column; height: 100vh; }
+        
+        #topbar {
+            height: var(--topbar-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 16px; z-index: 100;
+        }
+
+        .tb-left { display: flex; align-items: center; gap: 12px; }
+        .tb-logo-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: var(--blue-dim);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--blue-light);
+        }
+        .tb-logo-text { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; font-family: var(--sans); }
+        .tb-logo-text span { color: var(--blue); }
+
+        #app-body { display: flex; flex: 1; overflow: hidden; }
+
+        #sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            padding: 24px; gap: 20px;
+        }
+
+        .sb-section-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; font-family: var(--sans); }
+
+        .input-wrapper { display: flex; flex-direction: column; gap: 8px; }
+        textarea {
+            width: 100%; height: 180px;
+            background: var(--surface2);
+            border: 1.5px solid var(--border2);
+            border-radius: var(--r);
+            color: var(--text);
+            padding: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            resize: none; outline: none;
+            transition: border-color 0.2s;
+        }
+        textarea:focus { border-color: var(--blue); background: var(--surface3); }
+
+        .btn {
+            height: 46px; padding: 0 16px; border-radius: var(--r2);
+            font-size: 14px; font-weight: 700; font-family: var(--sans);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            color: white; border: none; outline: none;
         }
-        .btn-blue { background: var(--apple-blue); color: white; }
-        .btn-gray { background: rgba(255, 255, 255, 0.1); color: white; }
-        .terminal-container { flex: 1; display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.1); }
-        .terminal { flex: 1; padding: 30px; font-family: var(--font-mono); font-size: 14px; color: #fff; overflow-y: auto; line-height: 1.8; }
-        .log-line { margin-bottom: 10px; display: flex; align-items: flex-start; gap: 15px; }
-        .status-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
-        .footer {
-            height: 48px;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            padding: 0 30px;
-            gap: 35px;
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.5);
+        .btn-primary { background: var(--blue); box-shadow: var(--shadow); }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border2); }
+        .btn-secondary:hover { background: var(--surface3); }
+
+        .btn-icon-only {
+            width: 46px; height: 46px; padding: 0; border-radius: var(--r2);
+            display: flex; align-items: center; justify-content: center;
+            background: var(--surface2); color: var(--text); border: 1.5px solid var(--border2);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;
         }
-        .stat-val { color: #fff; margin-left: 6px; font-size: 14px; }
-        .dock-wrapper { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; }
-        .dock {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(40px);
-            padding: 10px 18px;
-            border-radius: 24px;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        .btn-icon-only:hover { background: var(--surface3); border-color: var(--border3); transform: translateY(-1px); }
+        .btn-icon-only.success { color: var(--green); border-color: var(--green); background: var(--green-dim); }
+
+        .grid-action { display: flex; gap: 10px; }
+        .grid-action .btn-primary { flex: 1; }
+
+        #main-content { flex: 1; display: flex; flex-direction: column; background: var(--bg2); padding: 24px; gap: 20px; overflow-y: auto; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+        .stat-card {
+            background: var(--surface); padding: 20px; border-radius: var(--r2);
+            border: 1px solid var(--border); display: flex; align-items: center; gap: 16px;
+            box-shadow: var(--shadow);
         }
-        .dock-icon { width: 54px; height: 54px; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
-        .dock-icon:hover { transform: scale(1.3) translateY(-15px); }
-        .dock-icon img { width: 100%; height: 100%; object-fit: contain; }
-        .dock-icon.active::after {
-            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-            width: 4px; height: 4px; background: white; border-radius: 50%;
+        .stat-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
         }
-        @media (max-width: 768px) {
-            .window { width: 100%; height: 100%; border-radius: 0; }
-            .controls { display: none; }
-            .content { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; }
-            textarea { height: 100px; }
+        .stat-info { display: flex; flex-direction: column; }
+        .stat-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; font-family: var(--sans); }
+        .stat-value { font-size: 22px; font-weight: 800; color: var(--text); font-family: var(--sans); }
+
+        .terminal-card {
+            flex: 1; background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--r2); display: flex; flex-direction: column;
+            overflow: hidden; box-shadow: var(--shadow2);
         }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .terminal-header {
+            padding: 14px 20px; background: var(--surface2); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .terminal-body {
+            flex: 1; padding: 20px; font-family: 'JetBrains Mono', monospace;
+            font-size: 13px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .log-entry {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 10px 14px; border-radius: 10px;
+            background: rgba(255,255,255,0.02);
+            animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+        .log-icon { font-size: 20px !important; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+
+        @media (max-width: 900px) {
+            #app-body { flex-direction: column; }
+            #sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            #main-content { padding: 16px; }
+        }
     </style>
 </head>
 <body>
-<div class="window" id="mainWindow">
-    <div class="window-header">
-        <div class="controls">
-            <div class="dot dot-red" onclick="closeWindow()"></div>
-            <div class="dot dot-yellow"></div>
-            <div class="dot dot-green"></div>
-        </div>
-        <div class="window-title">Black Store - Checker (Fixed)</div>
-    </div>
-    <div class="content">
-        <div class="sidebar">
-            <span class="label">Input Links</span>
-            <textarea id="linksInput" placeholder="Cole os links ou códigos aqui..."></textarea>
-            <button class="btn btn-blue" id="startBtn" onclick="startChecker()">começar</button>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button class="btn btn-gray" onclick="copyValids()" style="font-size: 11px;">copiar</button>
-                <button class="btn btn-gray" onclick="downloadValids()" style="font-size: 11px;">baixar</button>
-            </div>
-            <button class="btn btn-gray" onclick="document.getElementById('fileInput').click()" style="font-size: 11px;">Import .txt</button>
-            <input type="file" id="fileInput" style="display: none;" onchange="handleFile(event)">
-        </div>
-        <div class="terminal-container">
-            <div class="terminal" id="terminal">
-                <div style="color: var(--apple-blue); font-weight: bold; margin-bottom: 15px;">[SISTEMA] PRONTO PARA USO.</div>
-            </div>
-            <div class="footer">
-                <div class="stat-item">TOTAL <span class="stat-val" id="stat-total">0</span></div>
-                <div class="stat-item" style="color: var(--apple-green);">VALIDOS <span class="stat-val" id="stat-valid">0</span></div>
-                <div class="stat-item" style="color: var(--apple-red);">INVALIDOS <span class="stat-val" id="stat-invalid">0</span></div>
+
+<div id="main-app">
+    <header id="topbar">
+        <div class="tb-left">
+            <div class="tb-logo-icon">
             </div>
         </div>
-    </div>
-</div>
-<div class="dock-wrapper">
-    <div class="dock">
-        <div class="dock-icon active" id="dock-checker" onclick="openWindow()">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Nitro Checker">
-        </div>
-        <div class="dock-icon" onclick="closeWindow()">
-            <img src="https://cdn-icons-png.flaticon.com/512/3221/3221803.png" alt="Trash">
-        </div>
+    </header>
+
+    <div id="app-body">
+        <aside id="sidebar">
+            <div class="sb-section-label">Painel de Controle</div>
+            
+            <div class="input-wrapper">
+                <label class="sb-section-label" style="font-size: 10px; opacity: 0.6;">Lista de Links</label>
+                <textarea id="linksInput" placeholder="Insira os links para verificação..."></textarea>
+            </div>
+
+            <div class="grid-action">
+                <button class="btn btn-primary ripple-host" id="startBtn" onclick="startChecker(event)">
+                    <span class="ms">play_circle</span>
+                    Iniciar
+                </button>
+                <button class="btn-icon-only ripple-host" id="copyBtn" onclick="copyValids(event)" title="Copiar Válidos">
+                    <span class="ms" id="copyIcon">content_copy</span>
+                </button>
+                <button class="btn-icon-only ripple-host" onclick="downloadValids(event)" title="Baixar Válidos">
+                    <span class="ms">download</span>
+                </button>
+            </div>
+
+            <button class="btn btn-secondary ripple-host" onclick="document.getElementById('fileInput').click()">
+                <span class="ms">upload_file</span>
+                Importar .txt
+            </button>
+            <input type="file" id="fileInput" style="display: none;" onchange="handleFile(event)" accept=".txt">
+
+            <div style="margin-top: auto; padding: 14px; background: var(--blue-dim2); border-radius: 14px; border: 1px solid var(--blue-dim);">
+                <div style="font-size: 11px; font-weight: 800; color: var(--blue-light); font-family: var(--sans);">SISTEMA ATIVO</div>
+                <div style="font-size: 10px; color: var(--text2); margin-top: 6px; font-family: var(--sans); line-height: 1.4;">Utilizando motor de verificação de alta velocidade.</div>
+            </div>
+        </aside>
+
+        <main id="main-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--blue-dim); color: var(--blue-light);">
+                        <span class="ms">analytics</span>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Total</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--green-dim); color: var(--green);">
+                        <span class="ms">check_circle</span>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Válidos</span>
+                        <span class="stat-value" id="stat-valid">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--red-dim); color: var(--red);">
+                        <span class="ms">cancel</span>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Inválidos</span>
+                        <span class="stat-value" id="stat-invalid">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal-card">
+                <div class="terminal-header">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="ms" style="font-size: 20px; color: var(--blue);">terminal</span>
+                        <span style="font-size: 12px; font-weight: 800; color: var(--text2); font-family: var(--sans);">LOGS DE OPERAÇÃO</span>
+                    </div>
+                    <span class="ms" style="font-size: 20px; cursor: pointer; color: var(--text3);" onclick="document.getElementById('terminal').innerHTML=''">delete_sweep</span>
+                </div>
+                <div class="terminal-body" id="terminal">
+                    <div class="log-entry">
+                        <span class="ms log-icon" style="color: var(--blue);">info</span>
+                        <div style="color: var(--text2);">Aguardando entrada para iniciar verificação...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
 
 <script>
-    const CONFIG = {
-        delay: 1500 // Aumentado levemente para evitar rate limit rápido
-    };
-    
+    // Ripple Effect Logic
+    document.addEventListener('mousedown', function(e) {
+        const host = e.target.closest('.ripple-host');
+        if (!host) return;
+        
+        const circle = document.createElement("span");
+        const diameter = Math.max(host.clientWidth, host.clientHeight);
+        const radius = diameter / 2;
+
+        circle.style.width = circle.style.height = `${diameter}px`;
+        circle.style.left = `${e.clientX - host.getBoundingClientRect().left - radius}px`;
+        circle.style.top = `${e.clientY - host.getBoundingClientRect().top - radius}px`;
+        circle.classList.add("ripple");
+
+        const ripple = host.getElementsByClassName("ripple")[0];
+        if (ripple) ripple.remove();
+        host.appendChild(circle);
+    });
+
+    // Checker Core Logic
+    const CONFIG = { delay: 1000 };
     let stats = { total: 0, checked: 0, valid: 0, invalid: 0, isRunning: false, validLinks: [] };
-    
-    const ICONS = {
-        valid: `<svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="var(--apple-green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
-        invalid: `<svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="var(--apple-red)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
-        info: `<svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="var(--apple-blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
-        warning: `<svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="var(--apple-yellow)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`
-    };
 
     function addLog(msg, type = 'info') {
         const terminal = document.getElementById('terminal');
-        const div = document.createElement('div');
-        div.className = 'log-line';
-        const color = type === 'valid' ? 'var(--apple-green)' : type === 'invalid' ? 'var(--apple-red)' : type === 'warning' ? 'var(--apple-yellow)' : '#fff';
-        div.innerHTML = `<div class="status-icon">${ICONS[type] || ICONS.info}</div><div style="color: ${color}">${msg}</div>`;
-        terminal.appendChild(div);
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        
+        const types = {
+            valid: { icon: 'check_circle', color: 'var(--green)' },
+            invalid: { icon: 'cancel', color: 'var(--red)' },
+            warning: { icon: 'warning', color: 'var(--yellow)' },
+            info: { icon: 'info', color: 'var(--blue)' }
+        };
+        
+        const config = types[type] || types.info;
+        entry.innerHTML = `
+            <span class="ms log-icon" style="color: ${config.color}">${config.icon}</span>
+            <div style="color: ${type === 'info' ? 'var(--text2)' : config.color}">${msg}</div>
+        `;
+        terminal.appendChild(entry);
         terminal.scrollTop = terminal.scrollHeight;
     }
 
     async function checkNitro(code) {
-        // Removido o token de autorização pois não é necessário para gift codes públicos
         const url = `https://discord.com/api/v9/entitlements/gift-codes/${code}?with_application=false&with_subscription_plan=true`;
         try {
-            const response = await fetch(url, { 
-                method: 'GET', 
-                headers: { 'Accept': '*/*' } 
-            });
-            
+            const response = await fetch(url);
             if (response.status === 200) {
                 const data = await response.json();
-                if (data.uses < data.max_uses) {
-                    return 'VALID';
-                } else {
-                    return 'CLAIMED';
-                }
-            } else if (response.status === 404) {
-                return 'INVALID';
-            } else if (response.status === 429) {
-                return 'RATE_LIMIT';
-            } else {
-                return 'ERROR';
+                return (data.uses < data.max_uses) ? 'VALID' : 'CLAIMED';
             }
-        } catch (err) {
-            return 'CORS_ERROR';
-        }
+            return response.status === 429 ? 'RATE_LIMIT' : 'INVALID';
+        } catch (err) { return 'CORS_ERROR'; }
     }
 
-    async function startChecker() {
+    async function startChecker(e) {
+        if (stats.isRunning) return;
         const input = document.getElementById('linksInput').value.trim();
         let links = input.split('\n').map(l => l.trim()).filter(Boolean);
-        if (links.length === 0) return;
+        if (links.length === 0) {
+            addLog("Nenhum link detectado.", "warning");
+            return;
+        }
 
-        stats.total = links.length; stats.checked = 0; stats.valid = 0; stats.invalid = 0; stats.validLinks = [];
-        stats.isRunning = true;
+        stats = { total: links.length, checked: 0, valid: 0, invalid: 0, isRunning: true, validLinks: [] };
         updateStats();
-        document.getElementById('startBtn').disabled = true;
-        addLog(`Iniciando verificação de ${links.length} links...`, "info");
+        
+        const btn = document.getElementById('startBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="ms">sync</span> Verificando...';
+        
+        addLog(`Motor iniciado: Processando ${links.length} itens.`, "info");
 
-        for (let link of links) {
+        for (let i = 0; i < links.length; i++) {
             if (!stats.isRunning) break;
-
-            // Extrair apenas o código do link (suporta discord.gift/, discordapp.com/gifts/, etc)
-            let code = link;
-            if (link.includes('/')) {
-                code = link.split('/').pop().split('?')[0];
-            }
+            let link = links[i];
+            let code = link.includes('/') ? link.split('/').pop().split('?')[0] : link;
 
             const result = await checkNitro(code);
 
             if (result === 'VALID') {
-                stats.valid++; 
-                stats.validLinks.push(link);
-                addLog(`VÁLIDO: ${link}`, "valid");
-            } else if (result === 'CLAIMED') {
-                stats.invalid++;
-                addLog(`RESGATADO: ${link}`, "warning");
-            } else if (result === 'INVALID') {
-                stats.invalid++;
-                addLog(`INVÁLIDO: ${link}`, "invalid");
+                stats.valid++; stats.validLinks.push(link);
+                addLog(`SUCESSO: ${link}`, "valid");
             } else if (result === 'RATE_LIMIT') {
-                addLog("Rate Limit! Aguardando 10 segundos...", "warning");
+                addLog("Rate limit atingido. Aguardando 10s...", "warning");
                 await new Promise(r => setTimeout(r, 10000));
-                // Tentar novamente o mesmo link
-                links.unshift(link);
-                continue;
+                i--; continue;
             } else if (result === 'CORS_ERROR') {
-                addLog("Erro de CORS! Certifique-se de estar usando uma extensão para ignorar CORS.", "invalid");
-                stats.isRunning = false;
+                addLog("CORS Error detectado.", "invalid");
                 break;
             } else {
                 stats.invalid++;
-                addLog(`ERRO DESCONHECIDO: ${link}`, "invalid");
+                addLog(`FALHA: ${link}`, "invalid");
             }
 
             stats.checked++;
@@ -296,8 +376,9 @@
         }
 
         stats.isRunning = false;
-        document.getElementById('startBtn').disabled = false;
-        addLog("Verificação finalizada.", "info");
+        btn.disabled = false;
+        btn.innerHTML = '<span class="ms">play_circle</span> Iniciar';
+        addLog("Processo finalizado.", "info");
     }
 
     function updateStats() {
@@ -306,11 +387,41 @@
         document.getElementById('stat-invalid').textContent = stats.invalid;
     }
 
-    function closeWindow() { document.getElementById('mainWindow').style.display = 'none'; document.getElementById('dock-checker').classList.remove('active'); }
-    function openWindow() { document.getElementById('mainWindow').style.display = 'flex'; document.getElementById('dock-checker').classList.add('active'); }
-    function handleFile(e) { const reader = new FileReader(); reader.onload = (e) => document.getElementById('linksInput').value = e.target.result; reader.readAsText(e.target.files[0]); }
-    function copyValids() { navigator.clipboard.writeText(stats.validLinks.join('\n')); alert("Copiado!"); }
-    function downloadValids() { const blob = new Blob([stats.validLinks.join('\n')], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'valid_nitro.txt'; a.click(); }
+    function handleFile(e) { 
+        const reader = new FileReader(); 
+        reader.onload = (e) => {
+            document.getElementById('linksInput').value = e.target.result;
+            addLog("Arquivo importado com sucesso.", "info");
+        };
+        reader.readAsText(e.target.files[0]); 
+    }
+
+    function copyValids(e) { 
+        if (stats.validLinks.length === 0) return;
+        navigator.clipboard.writeText(stats.validLinks.join('\n')); 
+        
+        const btn = document.getElementById('copyBtn');
+        const icon = document.getElementById('copyIcon');
+        
+        // Feedback visual
+        btn.classList.add('success');
+        icon.textContent = 'check';
+        
+        setTimeout(() => {
+            btn.classList.remove('success');
+            icon.textContent = 'content_copy';
+        }, 2000);
+        
+        addLog("Links válidos copiados!", "info");
+    }
+
+    function downloadValids(e) { 
+        if (stats.validLinks.length === 0) return;
+        const blob = new Blob([stats.validLinks.join('\n')], { type: 'text/plain' }); 
+        const url = URL.createObjectURL(blob); 
+        const a = document.createElement('a'); 
+        a.href = url; a.download = 'validos.txt'; a.click(); 
+    }
 </script>
 </body>
 </html>
