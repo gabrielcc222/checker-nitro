@@ -218,7 +218,7 @@
             <input type="file" id="fileInput" style="display: none;" onchange="handleFile(event)" accept=".txt">
 
             <div style="margin-top: auto; padding: 14px; background: var(--blue-dim2); border-radius: 14px; border: 1px solid var(--blue-dim);">
-                <div style="font-size: 11px; font-weight: 800; color: var(--blue-light); font-family: var(--sans);">SISTEMA ATIVO</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--blue-light); font-family: var(--sans);">sistema mais rapido</div>
                 <div style="font-size: 10px; color: var(--text2); margin-top: 6px; font-family: var(--sans); line-height: 1.4;">Utilizando motor de verificação de alta velocidade.</div>
             </div>
         </aside>
@@ -274,7 +274,6 @@
 </div>
 
 <script>
-    // Ripple Effect Logic
     document.addEventListener('mousedown', function(e) {
         const host = e.target.closest('.ripple-host');
         if (!host) return;
@@ -293,7 +292,6 @@
         host.appendChild(circle);
     });
 
-    // Checker Core Logic
     const CONFIG = { delay: 1000 };
     let stats = { total: 0, checked: 0, valid: 0, invalid: 0, isRunning: false, validLinks: [] };
 
@@ -403,7 +401,6 @@
         const btn = document.getElementById('copyBtn');
         const icon = document.getElementById('copyIcon');
         
-        // Feedback visual
         btn.classList.add('success');
         icon.textContent = 'check';
         
